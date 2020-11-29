@@ -2,7 +2,7 @@
 
 public class MouseManager : MonoBehaviour
 {
-    public FieldManager _fieldManager;
+    public FieldManager fieldManager;
     public LayerMask groundLayerMask;
     
     private Camera _camera;
@@ -14,7 +14,7 @@ public class MouseManager : MonoBehaviour
 
     public void Update()
     {
-        foreach (var hex in _fieldManager._hexManagers) 
+        foreach (var hex in fieldManager._hexManagers) 
             hex.IsBeingHovered(false);
 
         HighlightCurrentHex();
@@ -26,7 +26,7 @@ public class MouseManager : MonoBehaviour
 
         if (Physics.Raycast(ray, out var rayCastHit, 100, groundLayerMask.value))
         {
-            var hex = _fieldManager.GetClosestHex(rayCastHit.point);
+            var hex = fieldManager.GetClosestHex(rayCastHit.point);
             hex.IsBeingHovered(true);
         }
     }

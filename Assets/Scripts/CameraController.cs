@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
@@ -11,11 +9,10 @@ public class CameraController : MonoBehaviour
     So camera doesn't gain any height*/
      
     public float mainSpeed = 25.0f; //regular speed
-    float camSens = 0.25f; //How sensitive it with mouse
-    private Vector3 lastMouse = new Vector3(255, 255, 255); //kind of in the middle of the screen, rather than at the top (play)
-    private float totalRun = 1.0f;
-     
-    void Update () {
+    public float scrollSpeed = 25.0f;
+
+    private void Update ()
+    {
         // lastMouse = Input.mousePosition - lastMouse ;
         // lastMouse = new Vector3(-lastMouse.y * camSens, lastMouse.x * camSens, 0 );
         // lastMouse = new Vector3(transform.eulerAngles.x + lastMouse.x , transform.eulerAngles.y + lastMouse.y, 0);
@@ -24,16 +21,30 @@ public class CameraController : MonoBehaviour
         //Mouse  camera angle done.  
        
         //Keyboard commands
+        CameraMove();
+        MouseScroll();
+    }
+
+    private void CameraMove()
+    {
         var baseInput = GetBaseInput();
-        
-        totalRun = Mathf.Clamp(totalRun * 0.5f, 1f, 1000f);
-        baseInput = baseInput * mainSpeed;
-       
-        baseInput = baseInput * Time.deltaTime;
-        
+        baseInput *= mainSpeed;
+        baseInput *= Time.deltaTime;
         transform.Translate(baseInput);
     }
-     
+
+    private void MouseScroll()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") == 0f)
+            return;
+
+        var scroll = new Vector3(0, 0, Input.GetAxis("Mouse ScrollWheel") > 0f ? 1 : -1);
+        
+        scroll *= scrollSpeed;
+        scroll *= Time.deltaTime;
+        transform.Translate(scroll);
+    }
+
     private Vector3 GetBaseInput() 
     { 
         // if (Input.GetKey (KeyCode.W))
